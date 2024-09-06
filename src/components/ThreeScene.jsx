@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 const ThreeScene = () => {
     const mountRef = useRef(null);
     const modelRef = useRef(null);
-    const [size, setSize] = useState(0);
+    const [size, setSize] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
         const scene = new THREE.Scene();
@@ -18,10 +18,11 @@ const ThreeScene = () => {
         });
 
         const updateSize = () => {
-            const newSize = Math.min(window.innerWidth * 0.4, window.innerHeight * 0.6);
-            setSize(newSize);
-            renderer.setSize(newSize, newSize);
-            camera.aspect = 1;
+            const width = window.innerWidth < 1024 ? window.innerWidth - 32 : Math.min(window.innerWidth * 0.4, window.innerHeight * 0.6);
+            const height = window.innerWidth < 1024 ? width : width;
+            setSize({ width, height });
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
             camera.updateProjectionMatrix();
         };
 
@@ -96,8 +97,8 @@ const ThreeScene = () => {
         <div
             ref={mountRef}
             style={{
-                width: `${size}px`,
-                height: `${size}px`,
+                width: `${size.width}px`,
+                height: `${size.height}px`,
                 maxWidth: '100%',
                 maxHeight: '100%'
             }}

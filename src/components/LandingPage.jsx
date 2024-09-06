@@ -22,13 +22,13 @@ const LandingPage = () => {
                 <div className="w-2 h-2 bg-my-blue rounded-full"></div>
             </div>
 
-            <main className="flex-grow flex flex-col md:flex-row items-center justify-center">
-                <div className="max-w-xl w-full md:w-1/2 mb-8 md:mb-0 md:pr-8">
-                    <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-4">
-                        A <span className="text-my-yellow">25-year-old</span>
-                        <br />software engineer
+            <main className="flex-grow flex flex-col lg:flex-row items-center justify-center">
+                <div className="w-full lg:w-1/2 mb-0 lg:pr-6 md:ml-20 lg:ml-20 xl:ml-40">
+                    <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-bold mb-6 px-4 lg:px-0 leading-tight">
+                        Hello there! <br/> I'm <span className="text-my-yellow">Adrian</span>
+
                     </h1>
-                    <p className="mb-6 mt-4 md:mt-8 flex items-center">
+                    <p className="mb-6 mt-4 md:mt-8 flex items-center px-4 lg:px-0 text-2xl sm:text-2xl md:text-xl lg:text-lg">
                         <a
                             href={`mailto:${email}`}
                             className="hover:text-my-blue transition-colors duration-300 cursor-pointer"
@@ -41,26 +41,28 @@ const LandingPage = () => {
                             title="Copy email address"
                         >
                             {copied ? (
-                                <Check size={16} className="text-my-green" />
+                                <Check size={20} className="text-my-green" />
                             ) : (
-                                <Copy size={16} />
+                                <Copy size={20} />
                             )}
                         </button>
                     </p>
-                    <div className="flex flex-wrap gap-4">
-                        <a href="https://github.com/AdrianMiller99?tab=repositories" className="animated-underline text-my-yellow font-bold">My projects</a>
-                        <a href="#" className="animated-underline text-my-green font-bold">My 3D design work</a>
-                        <a href="#" className="animated-underline text-my-red font-bold">Download my résumé</a>
+                    <div className="flex flex-col lg:flex-row gap-6 px-4 lg:px-0">
+                        <div className="flex flex-col items-start lg:flex-row lg:items-center gap-6">
+                            <a href="https://github.com/AdrianMiller99?tab=repositories" className="animated-underline text-my-yellow font-bold text-2xl sm:text-2xl md:text-xl lg:text-lg">My projects</a>
+                            <a href="#" className="animated-underline text-my-green font-bold text-2xl sm:text-2xl md:text-xl lg:text-lg">My 3D design work</a>
+                            <a href="#" className="animated-underline text-my-red font-bold text-2xl sm:text-2xl md:text-xl lg:text-lg">Download my résumé</a>
+                        </div>
                     </div>
                 </div>
-                <div className="w-full md:w-1/2 flex justify-center items-center">
+                <div className="w-full lg:w-1/2 flex justify-center items-center mt-0 lg:mt-0">
                     <ThreeScene />
                 </div>
             </main>
 
-            <footer className="flex justify-center space-x-6 mt-8">
-                <a href="https://linkedin.com/in/adrian-miller99" className="text-gray-500 hover:text-white"><Linkedin size={20} /></a>
-                <a href="https://github.com/AdrianMiller99" className="text-gray-500 hover:text-white"><Github size={20} /></a>
+            <footer className="flex justify-center space-x-6 mt-0">
+                <a href="https://linkedin.com/in/adrian-miller99" className="text-gray-500 hover:text-white"><Linkedin size={24} /></a>
+                <a href="https://github.com/AdrianMiller99" className="text-gray-500 hover:text-white"><Github size={24} /></a>
             </footer>
         </div>
     );

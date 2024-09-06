@@ -1,8 +1,17 @@
-// eslint-disable-next-line no-unused-vars
-import React from 'react';
-import { Github, Linkedin } from 'lucide-react';
+import React, { useState } from 'react';
+import { Github, Linkedin, Copy, Check } from 'lucide-react';
 
 const LandingPage = () => {
+    const [copied, setCopied] = useState(false);
+    const email = 'adrian@adrianmiller.ch';
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(email).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    };
+
     return (
         <div className="min-h-screen bg-my-gray text-white flex flex-col justify-between p-8">
             {/* Identity dots */}
@@ -20,10 +29,24 @@ const LandingPage = () => {
                         A <span className="text-my-yellow">25-year-old</span>
                         <br />software engineer
                     </h1>
-                    <p className="mb-6 my-14">
-                        <a href="mailto:adrian@adrianmiller.ch" className="hover:text-my-blue transition-colors duration-300 cursor-pointer">
-                            adrian@adrianmiller.ch
+                    <p className="mb-6 my-14 flex items-center">
+                        <a
+                            href={`mailto:${email}`}
+                            className="hover:text-my-blue transition-colors duration-300 cursor-pointer"
+                        >
+                            {email}
                         </a>
+                        <button
+                            onClick={copyToClipboard}
+                            className="ml-4 p-1 rounded-full hover:bg-gray-700 transition-colors duration-300 focus:outline-none focus:ring-none focus:ring-offset-2 focus:ring-offset-my-gray focus:ring-white"
+                            title="Copy email address"
+                        >
+                            {copied ? (
+                                <Check size={16} className="text-my-green" />
+                            ) : (
+                                <Copy size={16} />
+                            )}
+                        </button>
                     </p>
                     <div className="space-x-4">
                         <a href="https://github.com/AdrianMiller99?tab=repositories" className="animated-underline text-my-yellow font-bold">My projects</a>

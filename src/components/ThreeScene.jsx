@@ -44,11 +44,11 @@ const ThreeScene = () => {
         pointLight.position.set(-5, 5, -5);
         scene.add(pointLight);
 
-        camera.position.set(0, 3, 8);
+        camera.position.set(0, 2, 5);
         camera.lookAt(0, 0, 0);
 
         const loader = new GLTFLoader();
-        const modelPath = './retro_computer4.glb';
+        const modelPath = './retro_pc_pro-opt.glb';
 
         loader.load(
             modelPath,

@@ -48,7 +48,7 @@ const ThreeScene = () => {
         camera.lookAt(0, 0, 0);
 
         const loader = new GLTFLoader();
-        const modelPath = './retro_pc_pro-opt.glb';
+        const modelPath = './retro_pc_pro2-opt.glb';
 
         loader.load(
             modelPath,

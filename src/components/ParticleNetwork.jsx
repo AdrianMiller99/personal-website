@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const ParticleNetwork = () => {
+const ParticleNetwork = ({ interactive = true }) => {
     const canvasRef = useRef(null);
     const [allParticlesCaught, setAllParticlesCaught] = useState(false);
 
@@ -79,8 +79,8 @@ const ParticleNetwork = () => {
                 this.x += this.vx;
                 this.y += this.vy;
 
-                // Mouse interaction
-                if (mouse.x !== null) {
+                // Mouse interaction only if interactive is true
+                if (interactive && mouse.x !== null) {
                     const dx = mouse.x - this.x;
                     const dy = mouse.y - this.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
@@ -93,7 +93,6 @@ const ParticleNetwork = () => {
                         this.x += directionX * force * 2;
                         this.y += directionY * force * 2;
 
-                        // Mark as caught if very close to mouse
                         if (distance < 30) {
                             this.isCaught = true;
                         }
@@ -213,7 +212,7 @@ const ParticleNetwork = () => {
             cancelAnimationFrame(animationFrameId);
             if (releaseTimeout) clearTimeout(releaseTimeout);
         };
-    }, []);
+    }, [interactive]);
 
     return (
         <canvas

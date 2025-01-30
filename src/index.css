@@ -21,3 +21,8 @@
 .animated-underline:hover::after {
     width: 100%;
 }
+
+.group:hover .absolute {
+    transform: translate(-50%, 0) scale(1);
+    pointer-events: auto;
+}

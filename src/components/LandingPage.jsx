@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
 import { Github, Linkedin, Copy, Check } from 'lucide-react';
-import ThreeScene from './ThreeScene';
+import ParticleNetwork from './ParticleNetwork';
 
 const LandingPage = () => {
     const [copied, setCopied] = useState(false);
@@ -14,17 +14,43 @@ const LandingPage = () => {
         });
     };
 
+    const navItems = [
+        { color: 'bg-my-green', title: 'About', links: ['Bio', 'Skills', 'Experience'] },
+        { color: 'bg-my-yellow', title: 'Projects', links: ['Web Dev', '3D Design', 'UI/UX'] },
+        { color: 'bg-my-red', title: 'Contact', links: ['Email', 'LinkedIn', 'GitHub'] },
+        { color: 'bg-my-blue', title: 'Resources', links: ['Resume', 'Portfolio', 'Blog'] }
+    ];
+
     return (
-        <div className="min-h-screen bg-my-gray text-white flex flex-col justify-between p-4 md:p-8">
+        <div className="min-h-screen bg-transparent text-white flex flex-col justify-between p-4 md:p-8">
+            <ParticleNetwork />
             <div className="flex justify-center space-x-2 mb-6 md:mb-12">
-                <div className="w-2 h-2 bg-my-green rounded-full"></div>
-                <div className="w-2 h-2 bg-my-yellow rounded-full"></div>
-                <div className="w-2 h-2 bg-my-red rounded-full"></div>
-                <div className="w-2 h-2 bg-my-blue rounded-full"></div>
+                {navItems.map((item, index) => (
+                    <div key={index} className="group relative">
+                        <div className={`w-2 h-2 ${item.color} rounded-full cursor-pointer transition-all duration-300 hover:scale-125`}></div>
+                        
+                        {/* Dropdown Panel */}
+                        <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 
+                                    top-full left-1/2 -translate-x-1/2 pt-4 transition-all duration-300">
+                            <div className={`${item.color} p-4 rounded-lg shadow-lg min-w-[160px]`}>
+                                <h3 className="font-bold mb-2">{item.title}</h3>
+                                <ul>
+                                    {item.links.map((link, linkIndex) => (
+                                        <li key={linkIndex} className="mb-1">
+                                            <a href="#" className="hover:text-my-gray transition-colors duration-300">
+                                                {link}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
 
-            <main className="flex-grow flex flex-col lg:flex-row items-center justify-center">
-                <div className="w-full lg:w-1/2 mb-0 lg:pr-6 md:ml-20 lg:ml-20 xl:ml-40">
+            <main className="flex-grow flex flex-col items-center justify-center">
+                <div className="w-full lg:w-2/3 text-center lg:text-left">
                     <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-bold mb-6 px-4 lg:px-0 leading-tight">
                         Hello there! <br/> I&apos;m <span className="text-my-yellow">Adrian</span>
 
@@ -55,9 +81,6 @@ const LandingPage = () => {
                             <a href="#" className="animated-underline text-my-red font-bold text-2xl sm:text-2xl md:text-xl lg:text-lg">Download my résumé</a>
                         </div>
                     </div>
-                </div>
-                <div className="w-full lg:w-1/2 flex justify-center items-center mt-0 lg:mt-0">
-                    <ThreeScene />
                 </div>
             </main>
 

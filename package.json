@@ -12,6 +12,8 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "lucide-react": "^0.439.0",
+    "pdfjs": "^2.5.3",
+    "pdfjs-dist": "^3.4.120",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",

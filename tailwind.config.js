@@ -12,6 +12,7 @@ export default {
         'my-green': '#4f9d77',
         'my-red': '#d15849',
         'my-blue': '#5fa2bf',
+        'my-purple': '#7353BA',
       },
     },
   },

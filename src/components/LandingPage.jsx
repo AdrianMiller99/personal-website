@@ -45,7 +45,7 @@ const LandingPage = () => {
             <main className="flex-grow flex flex-col items-center justify-center">
                 <div className="w-full lg:w-2/3 text-center lg:text-left">
                     <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-bold mb-6 px-4 lg:px-0 leading-tight">
-                        Hello there! <br/> I&apos;m <span className="text-my-yellow">Adrian</span>
+                        Hello there! <br/> I&apos;m <span className="text-my-purple">Adrian</span>
                     </h1>
                     <p className="mb-6 mt-4 md:mt-8 flex items-center px-4 lg:px-0 text-2xl sm:text-2xl md:text-xl lg:text-lg">
                         <a

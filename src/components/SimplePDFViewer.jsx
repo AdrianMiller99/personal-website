@@ -1,10 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { pdfjs } from 'pdfjs-dist';
+// Change the import approach to use the full library
+import * as pdfjsLib from 'pdfjs-dist';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCw, Maximize, ChevronsDown, Minimize } from 'lucide-react';
 import 'pdfjs-dist/web/pdf_viewer.css';
 
-// Set the worker path to use CDN
-pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+// Ensure PDF.js is properly set up
+let pdfVersion = '3.11.174'; // Default fallback version
+try {
+  // Get the PDF.js version from the library or fallback to a known version
+  pdfVersion = pdfjsLib.version || pdfVersion;
+  console.log('PDF.js version:', pdfVersion);
+  
+  // Force the worker to load from CDN
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 
+    `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.min.js`;
+  
+  console.log('PDF.js worker set to:', pdfjsLib.GlobalWorkerOptions.workerSrc);
+} catch (error) {
+  console.error('Error setting up PDF.js worker:', error);
+}
 
 // Add CSS for text layer selection
 const injectTextLayerCSS = () => {
@@ -64,6 +78,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
   const [rotation, setRotation] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isOptimalFit, setIsOptimalFit] = useState(true); // Track if we're in optimal fit mode
+  const [errorMessage, setErrorMessage] = useState(null); // Add error state
   const canvasRef = useRef(null);
   const textLayerRef = useRef(null);
   const containerRef = useRef(null);
@@ -187,6 +202,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
   // Load the PDF document
   useEffect(() => {
     setIsLoading(true);
+    setErrorMessage(null); // Clear any previous errors
     initialLoadRef.current = true; // Reset initial load flag when PDF changes
     prevScaleRef.current = 1.0; // Reset previous scale
     setIsOptimalFit(true); // Start with optimal fit mode
@@ -195,6 +211,17 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
     cleanupPdfInstance();
     
     console.log('Loading PDF from:', pdfUrl);
+    
+    // Check if PDF.js is properly loaded
+    if (!pdfjsLib || !pdfjsLib.getDocument) {
+      console.error('PDF.js library not properly loaded');
+      setIsLoading(false);
+      setErrorMessage('PDF.js library not properly loaded. Please check console for details.');
+      if (onError && typeof onError === 'function') {
+        onError(new Error('PDF.js library not properly loaded'));
+      }
+      return;
+    }
     
     // Add a timestamp to URL to prevent caching issues
     const urlWithTimestamp = `${pdfUrl}?t=${Date.now()}`;
@@ -205,11 +232,20 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
+        console.log('PDF fetch successful, converting to ArrayBuffer');
         return response.arrayBuffer();
       })
       .then(arrayBuffer => {
+        // Log the ArrayBuffer size for debugging
+        console.log('ArrayBuffer received, size:', arrayBuffer.byteLength);
+        
         // Load the PDF document from array buffer
-        const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+        const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+        
+        // Add progress monitoring
+        loadingTask.onProgress = (progressData) => {
+          console.log('PDF loading progress:', progressData.loaded / progressData.total * 100);
+        };
         
         return loadingTask.promise;
       })
@@ -236,7 +272,11 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
       })
       .catch(error => {
         console.error('Error loading PDF:', error);
+        console.error('PDF URL attempted:', urlWithTimestamp);
+        console.error('PDF.js version:', pdfVersion);
+        console.error('Worker path:', pdfjsLib.GlobalWorkerOptions.workerSrc);
         setIsLoading(false);
+        setErrorMessage(`Failed to load PDF: ${error.message}. Please check console for details.`);
         if (onError && typeof onError === 'function') {
           onError(error);
         }
@@ -338,7 +378,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
       
       // Calculate text positioning based on the PDF's transform
       // This is where we need to be more precise for text selection
-      const tx = pdfjs.Util.transform(
+      const tx = pdfjsLib.Util.transform(
         viewport.transform,
         item.transform
       );
@@ -625,6 +665,21 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
         {isLoading ? (
           <div className="flex items-center justify-center h-full w-full">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+          </div>
+        ) : errorMessage ? (
+          <div className="flex flex-col items-center justify-center h-full w-full p-4">
+            <div className="bg-red-600 text-white p-4 rounded-lg max-w-md text-center">
+              <h3 className="text-lg font-semibold mb-2">PDF Viewer Error</h3>
+              <p>{errorMessage}</p>
+              <div className="mt-4 text-sm">
+                <p>Try:</p>
+                <ul className="list-disc pl-6 text-left">
+                  <li>Refreshing the page</li>
+                  <li>Checking if your browser allows loading PDF from this domain</li>
+                  <li>Using the download button to view the PDF directly</li>
+                </ul>
+              </div>
+            </div>
           </div>
         ) : (
           <div 

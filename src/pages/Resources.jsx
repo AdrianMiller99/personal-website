@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
-import { Download, ExternalLink, FileUp } from 'lucide-react';
+import { Download, ExternalLink, FileUp, Sun, Moon } from 'lucide-react';
 import SimplePDFViewer from '../components/SimplePDFViewer';
 
 const Resources = () => {
-    const pdfUrl = '/CV_Adrian_Miller_Dark.pdf';
+    const darkModePdfUrl = '/CV_Adrian_Miller_Dark.pdf';
     const lightModePdfUrl = '/CV_Adrian_Miller.pdf';
+    const [isDarkPdf, setIsDarkPdf] = useState(true);
     const [containerHeight, setContainerHeight] = useState('800px');
     const [pdfError, setPdfError] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
     
+    // Use the correct PDF based on theme
+    const pdfUrl = isDarkPdf ? darkModePdfUrl : lightModePdfUrl;
+    
     useEffect(() => {
         // Set container height based on window size
         const updateHeight = () => {
-            setContainerHeight(`${window.innerHeight * 0.75}px`);
+            // Increase from 0.75 to 0.85 for a larger initial zoom
+            setContainerHeight(`${window.innerHeight * 0.85}px`);
         };
         
         updateHeight();
@@ -38,6 +43,11 @@ const Resources = () => {
         setPdfError(true);
     };
     
+    // Toggle PDF theme
+    const togglePdfTheme = () => {
+        setIsDarkPdf(prev => !prev);
+    };
+    
     // Simplified download function
     const downloadPdf = (e) => {
         e.preventDefault();
@@ -49,8 +59,8 @@ const Resources = () => {
         try {
             // Create a direct link to the PDF for download
             const link = document.createElement('a');
-            link.href = lightModePdfUrl;
-            link.download = 'CV_Adrian_Miller.pdf';
+            link.href = pdfUrl; // Use the current theme's PDF
+            link.download = isDarkPdf ? 'CV_Adrian_Miller_Dark.pdf' : 'CV_Adrian_Miller.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -64,7 +74,7 @@ const Resources = () => {
             setIsDownloading(false);
             
             // Fallback - open in new tab
-            window.open(lightModePdfUrl, '_blank');
+            window.open(pdfUrl, '_blank');
         }
     };
     
@@ -122,7 +132,21 @@ const Resources = () => {
                             renderFallback() : 
                             <SimplePDFViewer 
                                 pdfUrl={pdfUrl} 
-                                onError={handlePdfError} 
+                                onError={handlePdfError}
+                                renderCustomControls={(controlsProps) => (
+                                    <button
+                                        onClick={togglePdfTheme}
+                                        className="p-1 rounded hover:bg-gray-500 flex items-center"
+                                        aria-label={isDarkPdf ? "Switch to light mode" : "Switch to dark mode"}
+                                        title={isDarkPdf ? "Switch to light mode" : "Switch to dark mode"}
+                                    >
+                                        {isDarkPdf ? (
+                                            <Sun size={18} className="text-white" />
+                                        ) : (
+                                            <Moon size={18} className="text-white" />
+                                        )}
+                                    </button>
+                                )}
                             />
                         }
                     </div>

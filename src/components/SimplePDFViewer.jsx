@@ -46,7 +46,8 @@ const injectTextLayerCSS = () => {
       }
 
       .textLayer ::selection {
-        background: rgba(0, 0, 255, 0.3);
+        background: rgba(240, 171, 0, 1); /* my-yellow with opacity */
+        color: transparent;
       }
     `;
     document.head.appendChild(style);
@@ -56,7 +57,7 @@ const injectTextLayerCSS = () => {
 // Inject CSS when component is imported
 injectTextLayerCSS();
 
-const SimplePDFViewer = ({ pdfUrl, onError }) => {
+const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [scale, setScale] = useState(1.0);
@@ -117,16 +118,18 @@ const SimplePDFViewer = ({ pdfUrl, onError }) => {
   const calculateOptimalScale = () => {
     if (!containerRef.current || !originalPageSize.width || !originalPageSize.height) return 1.0;
     
-    // Get container dimensions with a small margin for comfort
-    const containerWidth = containerRef.current.clientWidth - 24; // 12px margin on each side
-    const containerHeight = containerRef.current.clientHeight - 24;
+    // Get container dimensions with a larger margin for comfort, especially at the top
+    const containerWidth = containerRef.current.clientWidth - 32; // 16px margin on each side
+    const containerHeight = containerRef.current.clientHeight - 50; // Additional margin for top
     
     // Calculate scale factors for width and height
     const scaleX = containerWidth / originalPageSize.width;
     const scaleY = containerHeight / originalPageSize.height;
     
     // Use the smaller scale to ensure the PDF fits within the container
-    const optimalScale = Math.min(scaleX, scaleY, 1.5); // Cap at 150% to avoid fuzzy rendering at very large scales
+    // Increase the scale multiplier from 1.0 to give a slightly larger initial view
+    // but still capped at 1.5 to avoid fuzzy rendering
+    const optimalScale = Math.min(scaleX, scaleY * 1.05, 1.5); // Slightly lower multiplier to ensure full visibility
     
     console.log(`Calculated optimal scale: ${optimalScale} from container size ${containerWidth}x${containerHeight} and page size ${originalPageSize.width}x${originalPageSize.height}`);
     
@@ -254,6 +257,11 @@ const SimplePDFViewer = ({ pdfUrl, onError }) => {
         const timer = setTimeout(() => {
           fitToContainer();
           initialLoadRef.current = false; // Mark initial load as complete
+          
+          // Ensure the top of the PDF is visible by scrolling to top after rendering
+          if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollTop = 0;
+          }
         }, 100);
         return () => clearTimeout(timer);
       }
@@ -481,37 +489,61 @@ const SimplePDFViewer = ({ pdfUrl, onError }) => {
     });
   };
   
-  // Add download and open in new tab options
-  const handleDownload = () => {
-    // Use fetch and blob approach for more reliable downloads
-    fetch(pdfUrl)
-      .then(response => response.blob())
-      .then(blob => {
-        const blobUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = 'CV_Adrian_Miller.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setTimeout(() => window.URL.revokeObjectURL(blobUrl), 100);
-      })
-      .catch(error => {
-        console.error('Download failed:', error);
-        window.open(pdfUrl, '_blank');
-      });
-  };
-  
-  const handleOpenInNewTab = () => {
-    window.open(pdfUrl, '_blank');
+  // Control props to pass to custom controls
+  const controlProps = {
+    pageNumber,
+    numPages,
+    scale,
+    rotation,
+    isLoading,
+    goToPrevPage,
+    goToNextPage,
+    zoomIn,
+    zoomOut,
+    rotate,
+    fitToContainer,
+    resetZoom
   };
   
   return (
     <div className="flex flex-col h-full">
       {/* Controls */}
       <div className="flex justify-between items-center p-1 bg-gray-600 rounded-t-lg">
-        {/* Only show page navigation controls if there's more than 1 page */}
-        {numPages > 1 ? (
+        {/* Custom controls or page navigation */}
+        <div className="flex items-center space-x-2">
+          {renderCustomControls ? (
+            renderCustomControls(controlProps)
+          ) : numPages > 1 ? (
+            <>
+              <button
+                onClick={goToPrevPage}
+                disabled={pageNumber <= 1 || isLoading}
+                className="p-1 rounded hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Previous page"
+              >
+                <ChevronLeft size={18} className="text-white" />
+              </button>
+              
+              <span className="text-white text-sm">
+                {pageNumber} / {numPages || '?'}
+              </span>
+              
+              <button
+                onClick={goToNextPage}
+                disabled={pageNumber >= numPages || isLoading}
+                className="p-1 rounded hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Next page"
+              >
+                <ChevronRight size={18} className="text-white" />
+              </button>
+            </>
+          ) : (
+            <div></div> /* Empty div to maintain the flex layout */
+          )}
+        </div>
+        
+        {/* Page navigation if custom controls are present and there are multiple pages */}
+        {renderCustomControls && numPages > 1 && (
           <div className="flex items-center space-x-2">
             <button
               onClick={goToPrevPage}
@@ -535,8 +567,6 @@ const SimplePDFViewer = ({ pdfUrl, onError }) => {
               <ChevronRight size={18} className="text-white" />
             </button>
           </div>
-        ) : (
-          <div></div> /* Empty div to maintain the flex layout */
         )}
         
         <div className="flex items-center space-x-2">
@@ -602,7 +632,7 @@ const SimplePDFViewer = ({ pdfUrl, onError }) => {
             className="absolute inset-0 overflow-auto"
           >
             <div 
-              className={`${isOptimalFit || scale <= 1 ? 'flex items-center justify-center min-h-full min-w-full' : ''} p-2`}
+              className={`${isOptimalFit || scale <= 1 ? 'flex items-start justify-center min-h-full min-w-full pt-4' : ''} p-2`}
             >
               <div className="relative">
                 <canvas 

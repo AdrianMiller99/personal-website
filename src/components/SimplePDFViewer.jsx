@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCw, Maximize, ChevronsDown } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCw, Maximize, ChevronsDown, Minimize } from 'lucide-react';
 import 'pdfjs-dist/web/pdf_viewer.css';
 
 // Set the worker path to the local file
@@ -510,29 +510,34 @@ const SimplePDFViewer = ({ pdfUrl, onError }) => {
     <div className="flex flex-col h-full">
       {/* Controls */}
       <div className="flex justify-between items-center p-1 bg-gray-600 rounded-t-lg">
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={goToPrevPage}
-            disabled={pageNumber <= 1 || isLoading}
-            className="p-1 rounded hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label="Previous page"
-          >
-            <ChevronLeft size={18} className="text-white" />
-          </button>
-          
-          <span className="text-white text-sm">
-            {pageNumber} / {numPages || '?'}
-          </span>
-          
-          <button
-            onClick={goToNextPage}
-            disabled={pageNumber >= numPages || isLoading}
-            className="p-1 rounded hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label="Next page"
-          >
-            <ChevronRight size={18} className="text-white" />
-          </button>
-        </div>
+        {/* Only show page navigation controls if there's more than 1 page */}
+        {numPages > 1 ? (
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={goToPrevPage}
+              disabled={pageNumber <= 1 || isLoading}
+              className="p-1 rounded hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Previous page"
+            >
+              <ChevronLeft size={18} className="text-white" />
+            </button>
+            
+            <span className="text-white text-sm">
+              {pageNumber} / {numPages || '?'}
+            </span>
+            
+            <button
+              onClick={goToNextPage}
+              disabled={pageNumber >= numPages || isLoading}
+              className="p-1 rounded hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Next page"
+            >
+              <ChevronRight size={18} className="text-white" />
+            </button>
+          </div>
+        ) : (
+          <div></div> /* Empty div to maintain the flex layout */
+        )}
         
         <div className="flex items-center space-x-2">
           <button
@@ -567,7 +572,7 @@ const SimplePDFViewer = ({ pdfUrl, onError }) => {
             disabled={isLoading}
             title="Reset to 100%"
           >
-            <ChevronsDown size={18} className="text-white" />
+            <Minimize size={18} className="text-white" />
           </button>
           
           <button
@@ -578,16 +583,6 @@ const SimplePDFViewer = ({ pdfUrl, onError }) => {
             disabled={isLoading}
           >
             <Maximize size={18} className="text-white" />
-          </button>
-          
-          <button
-            onClick={rotate}
-            className="p-1 rounded hover:bg-gray-500"
-            aria-label="Rotate"
-            type="button"
-            disabled={isLoading}
-          >
-            <RotateCw size={18} className="text-white" />
           </button>
         </div>
       </div>
@@ -631,4 +626,4 @@ const SimplePDFViewer = ({ pdfUrl, onError }) => {
   );
 };
 
-export default SimplePDFViewer; 
+export default SimplePDFViewer;

@@ -5,7 +5,7 @@ import ParticleNetwork from './ParticleNetwork';
 
 const LandingPage = () => {
     const [copied, setCopied] = useState(false);
-    const email = 'adrian@adrianmiller.ch';
+    const email = 'info@adrianmiller.ch';
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(email).then(() => {
@@ -24,22 +24,33 @@ const LandingPage = () => {
     return (
         <div className="min-h-screen bg-transparent text-white flex flex-col justify-between p-4 md:p-8">
             <ParticleNetwork />
-            <div className="flex justify-center space-x-6 mb-6 md:mb-12">
-                {navItems.map((item, index) => (
-                    <Link key={index} to={item.path} className="group relative">
-                        <div className={`w-5 h-5 ${item.color} rounded-full cursor-pointer 
-                            border-2 hover:bg-opacity-100 bg-opacity-0 
-                            transition-all duration-300 hover:scale-110`}>
+            <div className="sticky top-0 z-20 bg-transparent -mx-4 md:-mx-8">
+                <div className="w-full px-4 md:px-8">
+                    <div className="relative flex items-center">
+                        <div className="w-8 h-8">
+                            {/* Placeholder for logo */}
                         </div>
-                        <div className="absolute invisible group-hover:visible opacity-0 
-                            group-hover:opacity-100 top-full left-1/2 -translate-x-1/2 
-                            pt-4 transition-all duration-300">
-                            <div className={`${item.color} p-3 rounded-lg border-2 bg-opacity-20`}>
-                                <h3 className="text-sm font-medium whitespace-nowrap">{item.title}</h3>
+                        <div className="flex-1">
+                            <div className="flex justify-center space-x-6 py-4">
+                                {navItems.map((item, index) => (
+                                    <Link key={index} to={item.path} className="group relative">
+                                        <div className={`w-5 h-5 ${item.color} rounded-full cursor-pointer 
+                                            border-2 hover:bg-opacity-100 bg-opacity-0 
+                                            transition-all duration-300 hover:scale-110`}>
+                                        </div>
+                                        <div className="absolute invisible group-hover:visible opacity-0 
+                                            group-hover:opacity-100 top-full left-1/2 -translate-x-1/2 
+                                            pt-4 transition-all duration-300">
+                                            <div className={`${item.color} p-3 rounded-lg border-2 bg-opacity-20`}>
+                                                <h3 className="text-sm font-medium whitespace-nowrap">{item.title}</h3>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))}
                             </div>
                         </div>
-                    </Link>
-                ))}
+                    </div>
+                </div>
             </div>
 
             <main className="flex-grow flex flex-col items-center justify-center">

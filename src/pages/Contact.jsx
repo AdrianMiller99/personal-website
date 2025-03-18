@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import Layout from '../components/Layout';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 
 const Contact = () => {
@@ -36,12 +36,12 @@ const Contact = () => {
                 <h1 className="text-4xl font-bold mb-8">Contact</h1>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
+                    <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg">
                         <h2 className="text-2xl font-bold mb-4">Get in Touch</h2>
                         <div className="space-y-4 mb-8">
                             <div className="flex items-center space-x-3">
                                 <Mail className="text-my-red" />
-                                <span>adrian@adrianmiller.ch</span>
+                                <span>info@adrianmiller.ch</span>
                             </div>
                             <div className="flex items-center space-x-3">
                                 <MapPin className="text-my-red" />
@@ -52,32 +52,32 @@ const Contact = () => {
                         <form ref={form} onSubmit={handleSubmit} className="space-y-4">
                             <input type="hidden" name="to_name" value="Adrian" />
                             <div>
-                                <label className="block mb-2">Name</label>
+                                <label className="block mb-2 text-white">Name</label>
                                 <input
                                     type="text"
                                     name="from_name"
-                                    className="w-full p-2 rounded bg-gray-800 bg-opacity-50"
+                                    className="w-full p-2 rounded bg-gray-700 bg-opacity-80 border border-gray-600 focus:border-my-red focus:outline-none focus:ring-1 focus:ring-my-red text-white"
                                     value={formData.name}
                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block mb-2">Email</label>
+                                <label className="block mb-2 text-white">Email</label>
                                 <input
                                     type="email"
                                     name="from_email"
-                                    className="w-full p-2 rounded bg-gray-800 bg-opacity-50"
+                                    className="w-full p-2 rounded bg-gray-700 bg-opacity-80 border border-gray-600 focus:border-my-red focus:outline-none focus:ring-1 focus:ring-my-red text-white"
                                     value={formData.email}
                                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block mb-2">Message</label>
+                                <label className="block mb-2 text-white">Message</label>
                                 <textarea
                                     name="message"
-                                    className="w-full p-2 rounded bg-gray-800 bg-opacity-50 h-32"
+                                    className="w-full p-2 rounded bg-gray-700 bg-opacity-80 border border-gray-600 focus:border-my-red focus:outline-none focus:ring-1 focus:ring-my-red text-white h-32"
                                     value={formData.message}
                                     onChange={(e) => setFormData({...formData, message: e.target.value})}
                                     required
@@ -86,9 +86,9 @@ const Contact = () => {
                             
                             {status.message && (
                                 <div className={`p-3 rounded ${
-                                    status.type === 'success' ? 'bg-green-500/20 text-green-200' :
-                                    status.type === 'error' ? 'bg-red-500/20 text-red-200' :
-                                    'bg-blue-500/20 text-blue-200'
+                                    status.type === 'success' ? 'bg-green-500/30 text-green-200' :
+                                    status.type === 'error' ? 'bg-red-500/30 text-red-200' :
+                                    'bg-blue-500/30 text-blue-200'
                                 }`}>
                                     {status.message}
                                 </div>
@@ -103,20 +103,41 @@ const Contact = () => {
                         </form>
                     </div>
 
-                    <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg">
-                        <h2 className="text-2xl font-bold mb-4">Connect</h2>
-                        <p className="mb-6">
-                            Feel free to reach out through any of these platforms:
-                        </p>
-                        <div className="space-y-4">
-                            <a href="https://linkedin.com/in/adrian-miller99" 
-                               className="flex items-center space-x-3 hover:text-my-red">
-                                <span>LinkedIn</span>
-                            </a>
-                            <a href="https://github.com/AdrianMiller99" 
-                               className="flex items-center space-x-3 hover:text-my-red">
-                                <span>GitHub</span>
-                            </a>
+                    <div className="grid grid-rows-2 gap-6 h-full">
+                        <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg flex flex-col justify-center items-center">
+                            <div className="text-center">
+                                <img 
+                                    src="/headshot.jpg" 
+                                    alt="Adrian Miller" 
+                                    className="w-32 h-32 object-cover rounded-full mx-auto mb-4 border-2 border-my-red"
+                                />
+                                <h3 className="text-xl font-semibold mb-2">Adrian Miller</h3>
+                                <p className="text-gray-300">Software Developer</p>
+                            </div>
+                        </div>
+                        
+                        <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg flex flex-col justify-center">
+                            <h3 className="text-xl font-semibold mb-4 text-center">Connect With Me</h3>
+                            <div className="grid grid-cols-2 gap-4">
+                                <a 
+                                    href="https://linkedin.com/in/adrian-miller99" 
+                                    className="bg-blue-900 bg-opacity-30 flex flex-col items-center p-4 rounded-lg hover:bg-opacity-50 transition-all transform hover:-translate-y-1"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Linkedin size={32} className="text-blue-400 mb-2" />
+                                    <span>LinkedIn</span>
+                                </a>
+                                <a 
+                                    href="https://github.com/AdrianMiller99" 
+                                    className="bg-gray-700 bg-opacity-30 flex flex-col items-center p-4 rounded-lg hover:bg-opacity-50 transition-all transform hover:-translate-y-1"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <Github size={32} className="text-gray-300 mb-2" />
+                                    <span>GitHub</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

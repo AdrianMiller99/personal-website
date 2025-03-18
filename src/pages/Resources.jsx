@@ -5,8 +5,10 @@ import SimplePDFViewer from '../components/SimplePDFViewer';
 
 const Resources = () => {
     const pdfUrl = '/CV_Adrian_Miller_Dark.pdf';
+    const lightModePdfUrl = '/CV_Adrian_Miller.pdf';
     const [containerHeight, setContainerHeight] = useState('800px');
     const [pdfError, setPdfError] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
     
     useEffect(() => {
         // Set container height based on window size
@@ -15,14 +17,55 @@ const Resources = () => {
         };
         
         updateHeight();
-        window.addEventListener('resize', updateHeight);
         
-        return () => window.removeEventListener('resize', updateHeight);
+        // Debounce resize event
+        let resizeTimer;
+        const debouncedResize = () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(updateHeight, 250);
+        };
+        
+        window.addEventListener('resize', debouncedResize);
+        
+        return () => {
+            window.removeEventListener('resize', debouncedResize);
+            clearTimeout(resizeTimer);
+        };
     }, []);
     
     const handlePdfError = (error) => {
         console.log('PDF viewer failed, showing direct download links:', error);
         setPdfError(true);
+    };
+    
+    // Simplified download function
+    const downloadPdf = (e) => {
+        e.preventDefault();
+        
+        if (isDownloading) return; // Prevent multiple clicks
+        
+        setIsDownloading(true);
+        
+        try {
+            // Create a direct link to the PDF for download
+            const link = document.createElement('a');
+            link.href = lightModePdfUrl;
+            link.download = 'CV_Adrian_Miller.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Reset download state after a short delay
+            setTimeout(() => {
+                setIsDownloading(false);
+            }, 1000);
+        } catch (error) {
+            console.error('Download error:', error);
+            setIsDownloading(false);
+            
+            // Fallback - open in new tab
+            window.open(lightModePdfUrl, '_blank');
+        }
     };
     
     const renderFallback = () => {
@@ -42,13 +85,13 @@ const Resources = () => {
                     >
                         Open in New Tab <ExternalLink size={16} />
                     </a>
-                    <a 
-                        href={pdfUrl}
-                        download="CV_Adrian_Miller.pdf"
-                        className="px-4 py-2 border border-my-blue rounded text-my-blue hover:bg-gray-100 transition-colors flex items-center gap-2"
+                    <button 
+                        onClick={downloadPdf}
+                        disabled={isDownloading}
+                        className="px-4 py-2 border border-my-blue rounded text-my-blue hover:bg-gray-100 transition-colors flex items-center gap-2 disabled:opacity-50"
                     >
-                        Download <Download size={16} />
-                    </a>
+                        {isDownloading ? 'Downloading...' : 'Download'} <Download size={16} />
+                    </button>
                 </div>
             </div>
         );
@@ -60,13 +103,13 @@ const Resources = () => {
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-4xl font-bold">Resume</h1>
                     <div className="flex gap-4">
-                        <a 
-                            href={pdfUrl}
-                            download="CV_Adrian_Miller.pdf"
-                            className="px-4 py-2 bg-my-blue rounded hover:bg-opacity-80 transition-colors duration-300 flex items-center gap-2"
+                        <button 
+                            onClick={downloadPdf}
+                            disabled={isDownloading}
+                            className="px-4 py-2 bg-my-blue rounded hover:bg-opacity-80 transition-colors duration-300 flex items-center gap-2 disabled:opacity-50"
                         >
-                            Download CV <Download size={16} />
-                        </a>
+                            {isDownloading ? 'Downloading...' : 'Download CV'} <Download size={16} />
+                        </button>
                     </div>
                 </div>
                 
@@ -75,7 +118,13 @@ const Resources = () => {
                         className="bg-gray-700 rounded-lg overflow-hidden" 
                         style={{ height: containerHeight }}
                     >
-                        {pdfError ? renderFallback() : <SimplePDFViewer pdfUrl={pdfUrl} onError={handlePdfError} />}
+                        {pdfError ? 
+                            renderFallback() : 
+                            <SimplePDFViewer 
+                                pdfUrl={pdfUrl} 
+                                onError={handlePdfError} 
+                            />
+                        }
                     </div>
                 </div>
             </div>

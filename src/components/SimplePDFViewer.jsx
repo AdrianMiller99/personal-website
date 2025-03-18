@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import * as pdfjsLib from 'pdfjs-dist';
+import { pdfjs } from 'pdfjs-dist';
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.js';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCw, Maximize, ChevronsDown, Minimize } from 'lucide-react';
 import 'pdfjs-dist/web/pdf_viewer.css';
 
 // Set the worker path to the local file
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 // Add CSS for text layer selection
 const injectTextLayerCSS = () => {
@@ -209,7 +210,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
       })
       .then(arrayBuffer => {
         // Load the PDF document from array buffer
-        const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+        const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
         
         return loadingTask.promise;
       })
@@ -338,7 +339,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
       
       // Calculate text positioning based on the PDF's transform
       // This is where we need to be more precise for text selection
-      const tx = pdfjsLib.Util.transform(
+      const tx = pdfjs.Util.transform(
         viewport.transform,
         item.transform
       );

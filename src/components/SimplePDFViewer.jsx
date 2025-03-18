@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { pdfjs } from 'pdfjs-dist';
-import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.js';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCw, Maximize, ChevronsDown, Minimize } from 'lucide-react';
 import 'pdfjs-dist/web/pdf_viewer.css';
 
-// Set the worker path to the local file
-pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
+// Set the worker path to use CDN
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 // Add CSS for text layer selection
 const injectTextLayerCSS = () => {

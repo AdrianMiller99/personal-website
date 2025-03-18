@@ -17,8 +17,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
 
+      - name: Clean npm cache
+        run: |
+          rm -rf node_modules
+          rm -rf package-lock.json
+          npm cache clean --force
+
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: npm install
 
       - name: Build project
         env:

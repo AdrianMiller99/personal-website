@@ -123,8 +123,8 @@ const ParticleNetwork = ({ interactive = true }) => {
                 const directionY = dy / distance;
                 
                 // Reduced velocity multipliers for gentler dispersal
-                this.vx = directionX * (Math.random() * 1 + 2); // Changed from (Math.random() * 2 + 4)
-                this.vy = directionY * (Math.random() * 1 + 2); // Changed from (Math.random() * 2 + 4)
+                this.vx = directionX * (Math.random() * 1 + 2);
+                this.vy = directionY * (Math.random() * 1 + 2);
             }
 
             draw() {

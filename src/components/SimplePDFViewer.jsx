@@ -1,23 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-// Change the import approach to use the full library
 import * as pdfjsLib from 'pdfjs-dist';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCw, Maximize, ChevronsDown, Minimize } from 'lucide-react';
 import 'pdfjs-dist/web/pdf_viewer.css';
 
-// Ensure PDF.js is properly set up
-let pdfVersion = '3.11.174'; // Default fallback version
+let pdfVersion = '3.11.174';
 try {
   // Get the PDF.js version from the library or fallback to a known version
   pdfVersion = pdfjsLib.version || pdfVersion;
-  console.log('PDF.js version:', pdfVersion);
+  //console.log('PDF.js version:', pdfVersion);
   
   // Force the worker to load from CDN
   pdfjsLib.GlobalWorkerOptions.workerSrc = 
     `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfVersion}/pdf.worker.min.js`;
   
-  console.log('PDF.js worker set to:', pdfjsLib.GlobalWorkerOptions.workerSrc);
+  //console.log('PDF.js worker set to:', pdfjsLib.GlobalWorkerOptions.workerSrc);
 } catch (error) {
-  console.error('Error setting up PDF.js worker:', error);
+  //console.error('Error setting up PDF.js worker:', error);
 }
 
 // Add CSS for text layer selection
@@ -60,7 +58,7 @@ const injectTextLayerCSS = () => {
       }
 
       .textLayer ::selection {
-        background: rgba(240, 171, 0, 1); /* my-yellow with opacity */
+        background: rgba(240, 171, 0, 1);
         color: transparent;
       }
     `;
@@ -96,7 +94,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
       try {
         renderTaskRef.current.cancel();
       } catch (e) {
-        console.warn('Error cancelling render task:', e);
+        //console.warn('Error cancelling render task:', e);
       }
       renderTaskRef.current = null;
     }
@@ -114,7 +112,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
       try {
         pdfInstanceRef.current.destroy();
       } catch (e) {
-        console.warn('Error destroying PDF instance:', e);
+        //console.warn('Error destroying PDF instance:', e);
       }
       pdfInstanceRef.current = null;
     }
@@ -142,11 +140,10 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
     const scaleY = containerHeight / originalPageSize.height;
     
     // Use the smaller scale to ensure the PDF fits within the container
-    // Increase the scale multiplier from 1.0 to give a slightly larger initial view
-    // but still capped at 1.5 to avoid fuzzy rendering
-    const optimalScale = Math.min(scaleX, scaleY * 1.05, 1.5); // Slightly lower multiplier to ensure full visibility
+    const optimalScale = Math.min(scaleX, scaleY * 1.05, 1.5);
     
-    console.log(`Calculated optimal scale: ${optimalScale} from container size ${containerWidth}x${containerHeight} and page size ${originalPageSize.width}x${originalPageSize.height}`);
+    // Commented out for now as it's not needed
+    //console.log(`Calculated optimal scale: ${optimalScale} from container size ${containerWidth}x${containerHeight} and page size ${originalPageSize.width}x${originalPageSize.height}`);
     
     return optimalScale;
   };
@@ -175,7 +172,6 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
     if (!scrollContainerRef.current || !canvasRef.current) return;
     
     const scrollContainer = scrollContainerRef.current;
-    const canvas = canvasRef.current;
     
     // Calculate the center point of the current viewport
     const viewportWidth = scrollContainer.clientWidth;
@@ -210,11 +206,11 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
     // Clean up any existing PDF instance first
     cleanupPdfInstance();
     
-    console.log('Loading PDF from:', pdfUrl);
+    //console.log('Loading PDF from:', pdfUrl);
     
     // Check if PDF.js is properly loaded
     if (!pdfjsLib || !pdfjsLib.getDocument) {
-      console.error('PDF.js library not properly loaded');
+      //console.error('PDF.js library not properly loaded');
       setIsLoading(false);
       setErrorMessage('PDF.js library not properly loaded. Please check console for details.');
       if (onError && typeof onError === 'function') {
@@ -232,25 +228,25 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        console.log('PDF fetch successful, converting to ArrayBuffer');
+        //console.log('PDF fetch successful, converting to ArrayBuffer');
         return response.arrayBuffer();
       })
       .then(arrayBuffer => {
-        // Log the ArrayBuffer size for debugging
-        console.log('ArrayBuffer received, size:', arrayBuffer.byteLength);
+        // Log the ArrayBuffer size for debugging 
+        //console.log('ArrayBuffer received, size:', arrayBuffer.byteLength);
         
         // Load the PDF document from array buffer
         const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
         
         // Add progress monitoring
         loadingTask.onProgress = (progressData) => {
-          console.log('PDF loading progress:', progressData.loaded / progressData.total * 100);
+          //console.log('PDF loading progress:', progressData.loaded / progressData.total * 100);
         };
         
         return loadingTask.promise;
       })
       .then(pdfDoc => {
-        console.log('PDF loaded successfully with', pdfDoc.numPages, 'pages');
+        //console.log('PDF loaded successfully with', pdfDoc.numPages, 'pages');
         pdfInstanceRef.current = pdfDoc; // Store for cleanup
         setPdf(pdfDoc);
         setNumPages(pdfDoc.numPages);
@@ -258,7 +254,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
         // Check the first page to determine initial orientation and size
         return pdfDoc.getPage(1).then(page => {
           const viewport = page.getViewport({ scale: 1 });
-          console.log('Initial viewport dimensions:', viewport.width, 'x', viewport.height);
+          //console.log('Initial viewport dimensions:', viewport.width, 'x', viewport.height);
           
           // Store original page dimensions
           setOriginalPageSize({
@@ -271,10 +267,10 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
         });
       })
       .catch(error => {
-        console.error('Error loading PDF:', error);
-        console.error('PDF URL attempted:', urlWithTimestamp);
-        console.error('PDF.js version:', pdfVersion);
-        console.error('Worker path:', pdfjsLib.GlobalWorkerOptions.workerSrc);
+        //console.error('Error loading PDF:', error);
+        //console.error('PDF URL attempted:', urlWithTimestamp);
+        //console.error('PDF.js version:', pdfVersion);
+        //console.error('Worker path:', pdfjsLib.GlobalWorkerOptions.workerSrc);
         setIsLoading(false);
         setErrorMessage(`Failed to load PDF: ${error.message}. Please check console for details.`);
         if (onError && typeof onError === 'function') {
@@ -451,7 +447,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
         viewport: viewport
       };
       
-      console.log(`Rendering page ${num} with scale ${currentScale} and rotation ${currentRotation}`);
+      //console.log(`Rendering page ${num} with scale ${currentScale} and rotation ${currentRotation}`);
       renderTaskRef.current = page.render(renderContext);
       await renderTaskRef.current.promise;
       
@@ -473,7 +469,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
       
     } catch (error) {
       if (error.name !== 'RenderingCancelled') {
-        console.error('Error rendering page:', error);
+        //console.error('Error rendering page:', error);
       }
     }
   };
@@ -504,7 +500,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
     
     setScale(prevScale => {
       const newScale = Math.min(prevScale + 0.2, 3);
-      console.log('Zooming in, new scale:', newScale);
+      //console.log('Zooming in, new scale:', newScale);
       return newScale;
     });
   };
@@ -516,7 +512,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
     
     setScale(prevScale => {
       const newScale = Math.max(prevScale - 0.2, 0.5);
-      console.log('Zooming out, new scale:', newScale);
+      //console.log('Zooming out, new scale:', newScale);
       return newScale;
     });
   };
@@ -524,7 +520,7 @@ const SimplePDFViewer = ({ pdfUrl, onError, renderCustomControls }) => {
   const rotate = () => {
     setRotation(prevRotation => {
       const newRotation = (prevRotation + 90) % 360;
-      console.log('Rotating, new rotation:', newRotation);
+      //console.log('Rotating, new rotation:', newRotation);
       return newRotation;
     });
   };

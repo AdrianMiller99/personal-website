@@ -48,7 +48,6 @@ const Resources = () => {
         setIsDarkPdf(prev => !prev);
     };
     
-    // Simplified download function
     const downloadPdf = (e) => {
         e.preventDefault();
         
@@ -59,8 +58,8 @@ const Resources = () => {
         try {
             // Create a direct link to the PDF for download
             const link = document.createElement('a');
-            link.href = pdfUrl; // Use the current theme's PDF
-            link.download = isDarkPdf ? 'CV_Adrian_Miller_Dark.pdf' : 'CV_Adrian_Miller.pdf';
+            link.href = /* pdfUrl */ lightModePdfUrl; // Currently light mode is forced for downloads
+            link.download = /* isDarkPdf ? 'CV_Adrian_Miller_Dark.pdf' : */ 'CV_Adrian_Miller.pdf'; // Currently light mode is forced for downloads
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

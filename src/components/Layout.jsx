@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
                                         <div className={`w-5 h-5 ${item.color} rounded-full cursor-pointer 
                                             border-2 hover:bg-opacity-100 bg-opacity-0 
                                             transition-all duration-300 hover:scale-110
-                                            ${location.pathname === item.path ? 'bg-opacity-100' : ''}`}>
+                                            ${location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path)) ? 'bg-opacity-100' : ''}`}>
                                         </div>
                                         <div className="absolute invisible group-hover:visible opacity-0 
                                             group-hover:opacity-100 top-full left-1/2 -translate-x-1/2 

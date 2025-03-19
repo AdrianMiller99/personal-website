@@ -29,7 +29,6 @@ const Projects = () => {
             image: "/Chronicles_Of_Valor.png",
             underConstruction: true
         },
-        // TODO: Add more projects
     ];
 
     return (

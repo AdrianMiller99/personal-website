@@ -18,8 +18,7 @@ const ProjectDetail = () => {
     const [project, setProject] = useState(null);
     
     useEffect(() => {
-        // In a real app, you might fetch this data from an API
-        // For now, we'll hardcode the projects
+        // TODO: Fetch projects from a database instead of hardcoding them here
         const projects = {
             'decolonise': {
                 title: "Decolonise Volunteering",
@@ -27,7 +26,7 @@ const ProjectDetail = () => {
                 fullDescription: `This project was developed as part of my studies at the University of Applied Sciences and Arts Northwestern Switzerland. 
                 It was created in collaboration with SCI Switzerland. The goal was to create an interactive tool that educates people who want to volunteer about decolonization principles and practices. The quiz format makes learning engaging while providing valuable information about ethical volunteering approaches.`,
                 deployedUrl: "https://scich.org/decolonize-tool/",
-                githubUrl: "#", // Replace with actual GitHub URL if available
+                githubUrl: "",
                 technologies: ["React", "JavaScript", "CSS", "Spring Boot", "Java", "MySQL", "Docker"],
                 coverImage: "/decolonise.png",
                 images: ["/decolonise.png"],
@@ -38,14 +37,14 @@ const ProjectDetail = () => {
                 description: "A beautiful, user-friendly tool for creating custom gradient wallpapers in various aspect ratios.",
                 fullDescription: `I created this project one evening when I wanted a new desktop wallpaper but couldn't find anything I liked. The tool allows users to:
 
-• Create customized gradient wallpapers with up to 5 colors
-• Adjust gradient angle and opacity of each color
-• Select from common screen resolutions (16:9, 4:3, 21:9, etc.)
-• Support for custom dimensions
-• Toggle between light and dark themes
-• Download wallpapers in PNG format
+                    • Create customized gradient wallpapers with up to 5 colors
+                    • Adjust gradient angle and opacity of each color
+                    • Select from common screen resolutions (16:9, 4:3, 21:9, etc.)
+                    • Support for custom dimensions
+                    • Toggle between light and dark themes
+                    • Download wallpapers in PNG format
 
-It was a fun project to build and deploy in the short span of a couple of hours. The tool provides a straightforward interface for creating beautiful custom wallpapers quickly.`,
+                    It was a fun project to build and deploy in the short span of a couple of hours. The tool provides a straightforward interface for creating beautiful custom wallpapers quickly.`,
                 deployedUrl: "https://gradients.adrianmiller.ch/",
                 githubUrl: "https://github.com/AdrianMiller99/gradient_wallpaper_generator",
                 technologies: ["TypeScript", "React", "HTML", "Tailwind CSS"],
@@ -59,16 +58,16 @@ It was a fun project to build and deploy in the short span of a couple of hours.
                 underConstruction: true,
                 fullDescription: `Chronicles of Valor is a passion project born out of nostalgia. After finding an old Fire Emblem GameBoy game I played as a child, I was inspired to create my own tactical RPG with similar gameplay mechanics but with my own unique twist.
 
-This project is developed using the Godot Engine and GDScript. I chose Godot for this project because I had already gained experience with Unity during my university studies and wanted to explore a different game development ecosystem.
+                    This project is developed using the Godot Engine and GDScript. I chose Godot for this project because I had already gained experience with Unity during my university studies and wanted to explore a different game development ecosystem.
 
-Key Features (Planned):
-• Turn-based tactical combat on grid-based maps
-• Character progression and class system
-• Story-driven campaign with branching narratives
-• Retro pixel art aesthetic
-• Strategic unit positioning and terrain advantages
+                    Key Features (Planned):
+                    • Turn-based tactical combat on grid-based maps
+                    • Character progression and class system
+                    • Story-driven campaign with branching narratives
+                    • Retro pixel art aesthetic
+                    • Strategic unit positioning and terrain advantages
 
-The game is still early in development with core systems being built out. The repository is private, and no demo is currently available as the project still evolves.`,
+                    The game is still early in development with core systems being built out. The repository is private, and no demo is currently available as the project still evolves.`,
                 deployedUrl: "",
                 githubUrl: "",
                 technologies: ["Godot", "GDScript"],
@@ -76,14 +75,12 @@ The game is still early in development with core systems being built out. The re
                 images: ["/Chronicles_Of_Valor.png"],
                 date: "2024"
             },
-            // Add more projects as needed
         };
         
         if (projectId && projects[projectId]) {
             setProject(projects[projectId]);
         } else {
-            // Handle case where project doesn't exist
-            // You could redirect to 404 page or projects list
+            // TODO:Handle case where project doesn't exist
         }
     }, [projectId]);
     

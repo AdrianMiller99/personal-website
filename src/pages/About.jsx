@@ -3,10 +3,40 @@ import Layout from '../components/Layout';
 
 const About = () => {
     const skills = [
-        "React", "Next.js", "JavaScript", "TypeScript", "Python", "Java", "C#", "C", 
-        "Kotlin", "Haskell", "HTML5", "CSS", "SQL", "MySQL", "MongoDB", "Oracle Database",
-        "Pandas", "Node.js", "Android Development", "Unity", "Godot", "Git", "Docker",
-        "Android Studio", "Scrum", "Project Planning"
+        "React",
+        "Next.js",
+        "JavaScript",
+        "TypeScript",
+        "Python",
+        "Java",
+        "C#",
+        "C",
+        "Kotlin",
+        "Haskell",
+        "HTML5",
+        "CSS",
+        "SQL",
+        "MySQL",
+        "MongoDB",
+        "Oracle Database",
+        "Pandas",
+        "Node.js",
+        "Android Development",
+        "Unity",
+        "Godot",
+        "Git",
+        "Docker",
+        "Android Studio",
+        "Scrum",
+        "Project Planning",
+        "Vue 3",
+        "Tailwind CSS",
+        "Spring Boot",
+        "Express",
+        "Capacitor",
+        "Pinia",
+        "PyTorch",
+        "GDScript"
     ];
 
     return (

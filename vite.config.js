@@ -8,9 +8,6 @@ export default defineConfig({
   // base: '/personal-website/',
   // When using HashRouter and a custom domain, we can leave base as '/'
   base: '/',
-  optimizeDeps: {
-    include: ['react-pdf'],
-  },
   server: {
     headers: {
       'Cross-Origin-Embedder-Policy': 'require-corp',

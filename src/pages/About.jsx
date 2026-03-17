@@ -16,7 +16,7 @@ const About = () => {
                 
                 <section className="mb-12 flex flex-col md:flex-row gap-8">
                     <div className="md:w-1/3">
-                        <div className="bg-gray-800 bg-opacity-50 p-4 rounded-lg overflow-hidden">
+                        <div className="glass-surface p-4 rounded-lg overflow-hidden">
                             <img 
                                 src="/headshot.jpg" 
                                 alt="Adrian Miller" 
@@ -25,7 +25,7 @@ const About = () => {
                         </div>
                     </div>
                     <div className="md:w-2/3">
-                        <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg">
+                        <div className="glass-surface p-6 rounded-lg">
                             <div className="mb-4">
                             <p>Hi, I'm Adrian, a computer science student from Switzerland with a passion for blending creativity and technology. While coding is at the heart of what I do, my creative pursuits don't end there—I express myself through music by playing the piano and crafting digital art with 3D modeling in Blender.</p>
 
@@ -41,7 +41,7 @@ const About = () => {
 
                 <section className="mb-12">
                     <h2 className="text-2xl font-bold mb-4">Skills</h2>
-                    <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg">
+                    <div className="glass-surface p-6 rounded-lg">
                         <div className="flex flex-wrap gap-2">
                             {skills.map((skill, index) => (
                                 <span 

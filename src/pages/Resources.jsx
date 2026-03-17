@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
-import { Download, ExternalLink, FileUp, Sun, Moon } from 'lucide-react';
+import { Download, ExternalLink, FileUp } from 'lucide-react';
 import SimplePDFViewer from '../components/SimplePDFViewer';
 
 const Resources = () => {
-    const darkModePdfUrl = '/CV_Adrian_Miller_Dark.pdf';
-    const lightModePdfUrl = '/CV_Adrian_Miller.pdf';
-    const [isDarkPdf, setIsDarkPdf] = useState(true);
+    const pdfUrl = '/CV_Adrian_Miller.pdf';
     const [containerHeight, setContainerHeight] = useState('800px');
     const [pdfError, setPdfError] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
-    
-    // Use the correct PDF based on theme
-    const pdfUrl = isDarkPdf ? darkModePdfUrl : lightModePdfUrl;
     
     useEffect(() => {
         // Set container height based on window size
@@ -43,11 +38,6 @@ const Resources = () => {
         setPdfError(true);
     };
     
-    // Toggle PDF theme
-    const togglePdfTheme = () => {
-        setIsDarkPdf(prev => !prev);
-    };
-    
     const downloadPdf = (e) => {
         e.preventDefault();
         
@@ -58,8 +48,8 @@ const Resources = () => {
         try {
             // Create a direct link to the PDF for download
             const link = document.createElement('a');
-            link.href = /* pdfUrl */ lightModePdfUrl; // Currently light mode is forced for downloads
-            link.download = /* isDarkPdf ? 'CV_Adrian_Miller_Dark.pdf' : */ 'CV_Adrian_Miller.pdf'; // Currently light mode is forced for downloads
+            link.href = pdfUrl;
+            link.download = 'CV_Adrian_Miller.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -122,7 +112,7 @@ const Resources = () => {
                     </div>
                 </div>
                 
-                <div className="backdrop-blur-md bg-gray-800 bg-opacity-50 p-6 rounded-lg overflow-hidden">
+                <div className="glass-surface p-6 rounded-lg overflow-hidden">
                     <div 
                         className="bg-gray-700 rounded-lg overflow-hidden" 
                         style={{ height: containerHeight }}
@@ -132,20 +122,6 @@ const Resources = () => {
                             <SimplePDFViewer 
                                 pdfUrl={pdfUrl} 
                                 onError={handlePdfError}
-                                renderCustomControls={(controlsProps) => (
-                                    <button
-                                        onClick={togglePdfTheme}
-                                        className="p-1 rounded hover:bg-gray-500 flex items-center"
-                                        aria-label={isDarkPdf ? "Switch to light mode" : "Switch to dark mode"}
-                                        title={isDarkPdf ? "Switch to light mode" : "Switch to dark mode"}
-                                    >
-                                        {isDarkPdf ? (
-                                            <Sun size={18} className="text-white" />
-                                        ) : (
-                                            <Moon size={18} className="text-white" />
-                                        )}
-                                    </button>
-                                )}
                             />
                         }
                     </div>

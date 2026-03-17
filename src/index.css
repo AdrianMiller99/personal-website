@@ -27,6 +27,14 @@
     pointer-events: auto;
 }
 
+.glass-surface {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(42, 57, 87, 0.02);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
 @media print {
     body {
         background: white;

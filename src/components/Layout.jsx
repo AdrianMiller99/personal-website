@@ -15,9 +15,9 @@ const Layout = ({ children }) => {
     ];
 
     return (
-        <div className="min-h-screen bg-transparent text-white flex flex-col justify-between p-4 md:p-8">
+        <div className="min-h-screen bg-transparent text-white flex flex-col justify-between px-4 pb-4 md:px-8 md:pb-8">
             <ParticleNetwork interactive={isHome} />
-            <div className="sticky top-0 z-20 bg-my-gray/80 backdrop-blur-sm -mx-4 md:-mx-8">
+            <div className="sticky top-0 z-20 glass-surface -mx-4 md:-mx-8">
                 <div className="w-full px-4 md:px-8">
                     <div className="relative flex items-center">
                         <Link to="/" className="hover:scale-110 transition-transform duration-300">

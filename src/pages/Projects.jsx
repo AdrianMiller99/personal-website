@@ -14,7 +14,7 @@ const Projects = () => {
                         <Link 
                             key={index} 
                             to={`/projects/${project.id}`} 
-                            className="bg-gray-800 bg-opacity-50 rounded-lg overflow-hidden hover:bg-opacity-70 transition duration-300"
+                            className="glass-surface rounded-lg overflow-hidden transition duration-300 hover:border-white/15"
                         >
                             <div className="h-48 bg-gray-700 overflow-hidden">
                                 <ProjectCover project={project} className="w-full h-full" />

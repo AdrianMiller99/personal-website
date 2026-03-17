@@ -3,6 +3,18 @@ import Layout from '../components/Layout';
 import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 
+const DIRECT_EMAIL = 'info@adrianmiller.ch';
+
+function getEmailErrorMessage(error) {
+    const detail = typeof error?.text === 'string' ? error.text : '';
+
+    if (detail.includes('Invalid grant')) {
+        return `The contact form email service needs to be reconnected. Please email me directly at ${DIRECT_EMAIL} for now.`;
+    }
+
+    return `Failed to send message. Please try again or email me directly at ${DIRECT_EMAIL}.`;
+}
+
 const Contact = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -26,7 +38,8 @@ const Contact = () => {
             setStatus({ type: 'success', message: 'Message sent successfully!' });
             setFormData({ name: '', email: '', message: '' });
         }, (error) => {
-            setStatus({ type: 'error', message: 'Failed to send message. Please try again.' });
+            console.error('EmailJS send failed', error);
+            setStatus({ type: 'error', message: getEmailErrorMessage(error) });
         });
     };
 
@@ -36,12 +49,12 @@ const Contact = () => {
                 <h1 className="text-4xl font-bold mb-8">Contact</h1>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg">
+                    <div className="glass-surface p-6 rounded-lg">
                         <h2 className="text-2xl font-bold mb-4">Get in Touch</h2>
                         <div className="space-y-4 mb-8">
                             <div className="flex items-center space-x-3">
                                 <Mail className="text-my-red" />
-                                <span>info@adrianmiller.ch</span>
+                                <span>{DIRECT_EMAIL}</span>
                             </div>
                             <div className="flex items-center space-x-3">
                                 <MapPin className="text-my-red" />
@@ -104,7 +117,7 @@ const Contact = () => {
                     </div>
 
                     <div className="grid grid-rows-2 gap-6 h-full">
-                        <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg flex flex-col justify-center items-center">
+                        <div className="glass-surface p-6 rounded-lg flex flex-col justify-center items-center">
                             <div className="text-center">
                                 <img 
                                     src="/headshot.jpg" 
@@ -116,12 +129,12 @@ const Contact = () => {
                             </div>
                         </div>
                         
-                        <div className="bg-gray-800 bg-opacity-50 p-6 rounded-lg flex flex-col justify-center">
+                        <div className="glass-surface p-6 rounded-lg flex flex-col justify-center">
                             <h3 className="text-xl font-semibold mb-4 text-center">Connect With Me</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <a 
                                     href="https://linkedin.com/in/adrian-miller99" 
-                                    className="bg-blue-900 bg-opacity-30 flex flex-col items-center p-4 rounded-lg hover:bg-opacity-50 transition-all transform hover:-translate-y-1"
+                                    className="glass-surface flex flex-col items-center p-4 rounded-lg transition-all transform hover:-translate-y-1 hover:border-white/15"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -130,7 +143,7 @@ const Contact = () => {
                                 </a>
                                 <a 
                                     href="https://github.com/AdrianMiller99" 
-                                    className="bg-gray-700 bg-opacity-30 flex flex-col items-center p-4 rounded-lg hover:bg-opacity-50 transition-all transform hover:-translate-y-1"
+                                    className="glass-surface flex flex-col items-center p-4 rounded-lg transition-all transform hover:-translate-y-1 hover:border-white/15"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >

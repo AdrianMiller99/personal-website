@@ -22,7 +22,7 @@ const LandingPage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-transparent text-white flex flex-col justify-between p-4 md:p-8">
+        <div className="min-h-screen bg-transparent text-white flex flex-col justify-between px-4 pb-4 md:px-8 md:pb-8">
             <ParticleNetwork />
             <div className="sticky top-0 z-20 bg-transparent -mx-4 md:-mx-8">
                 <div className="w-full px-4 md:px-8">

@@ -37,7 +37,7 @@ Highlights:
 - A focused, editorial presentation rather than a dashboard-style interface`,
         category: 'Data Visualization',
         technologies: ['JavaScript', 'D3.js', 'Leaflet', 'HTML', 'CSS'],
-        deployedUrl: 'https://miller-earthquakes-5790d7.pages.fhnw.ch/',
+        deployedUrl: 'https://earthquakes.coolify.adrianmiller.ch/',
         date: '2026',
         image:'earthquake.png'
     },
